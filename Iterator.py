@@ -15,11 +15,5 @@ def natural_selection(tank,MS):
     else:
         finder = -1
     # Find what to change
-    old_margin = finder * 10000
-    index = 0
-    for margin in MS:
-        new_margin = margin
-        if new_margin < old_margin:
-            old_margin = new_margin
-            best = index
-        index += 1
+    margin is max(MS)
+    index_margin = MS.index(max(MS))
