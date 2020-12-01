@@ -1,4 +1,4 @@
-import Get_Volume
+from Get_Volume import *
 
 class Fuel_Tank():
     def __init__(self, species):
@@ -10,6 +10,14 @@ class Fuel_Tank():
         self.thickness = 4 #t in mm
         self.outerradius = self.radius + self.thickness # mm
 
+
+
+
 # Global variables
 max_height = 891 #L+2r in mm
 fuel_mass = 480 #kg
+
+
+# Start of main loop
+
+volume = get_volume(tank.pressure, fuel_mass)
