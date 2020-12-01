@@ -26,7 +26,7 @@ max_height = 891 #L+2r in mm
 fuel_mass = 480 #kg
 
 number_species = 10
-total_tanks = 1000
+total_tanks = 100
 per_species = total_tanks / number_species
 total_generations = 10
 

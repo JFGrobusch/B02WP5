@@ -13,7 +13,7 @@ def best_finder(number_species, per_species, tanks):
         population.append(species)
     # Find best from species
     for species in population:
-        alpha = 
+        alpha = #best
         
     
 
