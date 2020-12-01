@@ -9,11 +9,22 @@ def natural_selection(tank,MS):
     for margin in MS:
         if margin < 0:
             safe = False
-    # Set positve or negative
+    # Set positve or negative and find what to change.
     if safe:
-        finder = 1
+        adjuster = 1
+        margin is max(MS)
+        index_margin = MS.index(max(MS))
     else:
-        finder = -1
-    # Find what to change
-    margin is max(MS)
-    index_margin = MS.index(max(MS))
+        adjuster = -1
+        margin is min(MS)
+        index_margin = MS.index(min(MS))
+    # Get variables
+
+    # Change the variable(s)
+
+def evolver(tanks):
+    # Find best for species
+    # Apply normal change
+    # copy once
+    # multiply and mutate
+    # return back to start
