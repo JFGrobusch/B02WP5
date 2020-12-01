@@ -10,7 +10,10 @@ class Fuel_Tank():
         self.thickness = 4 #t in mm
         self.outerradius = self.radius + self.thickness # mm
 
-
+class Margin_of_safety():
+    def __init__(self, name, value):
+        self.name = name
+        self.value = value
 
 
 # Global variables
