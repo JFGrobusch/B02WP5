@@ -3,6 +3,27 @@
 
 MS = [5,2,4]
 
+population =[]
+def best_finder(number_species, per_species, tanks):
+    # Sort by species
+    while len(tanks)>0:
+        species = []
+        for tank in range(per_species):
+            species.append(tank.pop())
+        population.append(species)
+    # Find best from species
+    for species in population:
+        alpha = 
+        
+    
+
+
+
+
+
+
+
+
 def natural_selection(tank,MS):
     # check if any margin is not satisfied to fix this first
     safe = True
