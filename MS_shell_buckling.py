@@ -20,4 +20,3 @@ def shellbucklingMS(tank, material):
     tank.MS_shell = bucklingstress/criticalstress
     tank = tomm(tank)
     material = tommm(material)
-    return(tank)

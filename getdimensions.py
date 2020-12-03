@@ -31,7 +31,6 @@ def getdimensions(tank, targetvolume, maxheight):
     tank.radius = rlist[Vdiffs.index(min(Vdiffs))]
     tank.height = h - 2*tank.radius
 
-    return(tank)
 
 class tanky:
     def __init__(self,):

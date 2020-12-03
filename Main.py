@@ -1,6 +1,6 @@
 from Get_Volume import *
 from getdimensions import *
-from MS_single_thickness import *
+#from MS_single_thickness import *
 from MS_shell_buckling import *
 
 class Fuel_Tank():
@@ -22,6 +22,7 @@ class Fuel_Tank():
         self.MS = [self.MS_pressure,self.MS_euler,self.MS_shell]
     
     def safety_check(self):
+        self.MS = [self.MS_pressure,self.MS_euler,self.MS_shell]
         for margin in self.MS:
             if margin < 0:
                 self.safety = False
@@ -57,17 +58,23 @@ ev_speed = 0.5
 volume = get_volume(tank.pressure, fuel_mass)
 """
 
+def pressure(tank,material):
+    sigma_hoop = tank.pressure * tank.radius / tank.thickness
+    tank.MS_pressure = material.yield_strength / sigma_hoop - 1
+
+
 material = Material('Alu', 276, 0.33, 68.9E3)
 
 tank = Fuel_Tank(0)
-tank = getdimensions(tank, tank.volume, 1.7E3)
+getdimensions(tank, tank.volume, 1.7E3)
 tank.thickness = 0.1
 tank.safety_check()
 while not tank.safety:
     #print(tank.thickness)
-    print(tank.MS)
+    #print(tank.MS)
     tank.thickness += 0.1
     pressure(tank,material)
     shellbucklingMS(tank,material)
     tank.safety_check()
+    print(tank.MS)
 print(tank.thickness)
