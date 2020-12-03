@@ -12,6 +12,7 @@ def shellbucklingMS(tank, material):
     lam = C**0.5
     k = lam + C*(1/lam)
     Q = (tank.pressure/material.elasticity)*(tank.radius/tank.thickness)**2
-    stress = (1.983-0.983*exp(-23.14*Q))*k*(pi**2*material.elasticity/(12*(10-material.poisson**2)))*(tank.thickness/tank.height)**2
-    MS = stress/material.yieldstress
-    return(MS)
+    criticalstress = (1.983-0.983*exp(-23.14*Q))*k*(pi**2*material.elasticity/(12*(10-material.poisson**2)))*(tank.thickness/tank.height)**2
+    bucklingstress = material.yield_strength*(tank.MS_pressure+1)
+    tank.MS_shell = bucklingstress/criticalstress
+    return(tank)
