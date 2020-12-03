@@ -20,7 +20,7 @@ class Fuel_Tank():
 
 population =[]
 
-number_species = 20
+number_species = 10
 total_tanks = 100
 per_species = total_tanks / number_species
 total_generations = 10
@@ -54,7 +54,7 @@ def evolver(tank,ev_speed):
     for margin in tank.MS:
         if margin < 0:
             safe = False
-    print(safe)
+    #print(safe)
     # Set positve or negative and find what to change.
     if safe:
         adjuster = -1
@@ -64,7 +64,7 @@ def evolver(tank,ev_speed):
         adjuster = 1
         margin = min(tank.MS)
         index_margin = tank.MS.index(min(tank.MS))
-    print(margin, index_margin)
+    #print(margin, index_margin)
     # Get variables assosiated, currently random
     if index_margin == 0:
         # Variables for pressure: p,r,t1,t2
@@ -85,40 +85,43 @@ def evolver(tank,ev_speed):
         variables = ['p','r','t','l']
         rnd.shuffle(variables)
         change = variables[0]
-    print(change)
+    #print(change)
     # Find the evolution factor
-    ev_factor = ev_speed * (abs(margin))**(1/2)
-    print(ev_factor)
+    ev_factor = adjuster * ev_speed * (abs(margin))**(1/2)
+    #print(ev_factor)
     # Change the variable(s)
     if change == 'p':
-        tank.pressure += adjuster * ev_factor
+        tank.pressure += ev_factor
     elif change == 'r':
-        tank.radius += adjuster * ev_factor
+        tank.radius += ev_factor
     elif change == 't':
-        tank.thickness += adjuster * ev_factor
+        tank.thickness += ev_factor
     elif change == 'l':
-        tank.height += adjuster * ev_factor
+        tank.height += ev_factor
     evolved_tank = [tank,ev_factor]
     return evolved_tank
 
 def multiply(tanks,evolved_tank):
     tank = evolved_tank[0]
     ev_factor = evolved_tank[1]
-    print(tank,ev_factor)
+    #print(tank,ev_factor)
     tanks.append(tank)
+    # copy original
+    original_tank = tank
     # Mutate them
-    for tank in range(int(per_species-1)):
+    for number in range(int(per_species-1)):
+        tank = original_tank
         variables = ['p','r','t','l']
         rnd.shuffle(variables)
         change = variables[0]
         if change == 'p':
-            tank.pressure += adjuster * ev_factor
+            tank.pressure += ev_factor
         elif change == 'r':
-            tank.radius += adjuster * ev_factor
+            tank.radius += ev_factor
         elif change == 't':
-            tank.thickness += adjuster * ev_factor
+            tank.thickness += ev_factor
         elif change == 'l':
-            tank.height += adjuster * ev_factor
+            tank.height += ev_factor
         tanks.append(tank)
     return tanks
 
@@ -129,7 +132,13 @@ evolved_tank = evolver(tank,0.5)
 tank = evolved_tank[0]
 print(tank.pressure,tank.radius,tank.thickness,tank.height)
 tanks.append(multiply(tanks,evolved_tank))
-print(tanks)
+print(len(tanks),per_species)
+print(f'list:{tanks}')
+a=1
+for tank in tanks:
+    print(a)
+    print(tank.pressure)
+    a+=1
 # main loop
 
 #start with tanks
