@@ -28,6 +28,8 @@ total_generations = 10
 ev_speed = 0.01
 """
 
+# check limits of change
+
 def natural_selection(tanks):
     # Sort by species
     while len(tanks)>0:

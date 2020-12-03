@@ -36,8 +36,6 @@ per_species = total_tanks / number_species
 total_generations = 10
 ev_speed = 0.5
 
-#Testing - Thijmen
-
 # Start of main loop
 
 volume = get_volume(tank.pressure, fuel_mass)
