@@ -62,8 +62,9 @@ def pressure(tank,material):
     sigma_hoop = tank.pressure * tank.radius / tank.thickness
     tank.MS_pressure = material.yield_strength / sigma_hoop - 1
 
+safety_factor = 1.1
 
-material = Material('Alu', 276, 0.33, 68.9E3)
+material = Material('Alu', 276/safety_factor, 0.33, 68.9E3)
 
 tank = Fuel_Tank(0)
 getdimensions(tank, tank.volume, 1.7E3)

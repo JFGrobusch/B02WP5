@@ -37,13 +37,14 @@ class tanky:
         self.radius = 0.
         self.height = 0.
 
+"""
 maxheight = 1.7E3
 V = 3E8
 
 tank = tanky()
 tank = getdimensions(tank, V, maxheight)
 print(tank.radius, tank.height)
-   
+"""
 
     
     
