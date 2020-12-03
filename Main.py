@@ -1,5 +1,6 @@
 from Get_Volume import *
 from getdimensions import *
+from MS_single_thickness import *
 from MS_shell_buckling import *
 
 class Fuel_Tank():
@@ -14,11 +15,19 @@ class Fuel_Tank():
         self.fuel_mass = 480 #kg
         self.volume = get_volume(self.pressure, self.fuel_mass)
         # All the safety margins
-        self.MS_pressure = MS_pressure
-        self.MS_euler = MS_euler
-        self.MS_shell = MS_shell
+        self.MS_pressure = -1
+        self.MS_euler = 0
+        self.MS_shell = 0
         self.MS_total = self.MS_pressure + self.MS_euler + self.MS_shell
-        self.MS = [MS_pressure,MS_euler,MS_shell]
+        self.MS = [self.MS_pressure,self.MS_euler,self.MS_shell]
+    
+    def safety_check(self):
+        for margin in self.MS:
+            if margin < 0:
+                self.safety = False
+                break
+            else:
+                self.safety = True
 
 class Margin_of_safety():
     def __init__(self, name, value):
@@ -26,9 +35,11 @@ class Margin_of_safety():
         self.value = value
 
 class Material():
-    def __init__(self, name, yield_stress):
+    def __init__(self, name, yield_strength, poisson, elasticity):
         self.name = name
-        self.yield_stress = yield_stress
+        self.yield_strength = yield_strength
+        self.poisson = poisson
+        self.elasticity = elasticity
 
 """
 # Global variables
@@ -45,9 +56,16 @@ ev_speed = 0.5
 
 volume = get_volume(tank.pressure, fuel_mass)
 """
+
+material = Material('Alu', 276, 0.33, 68.9E3)
+
 tank = Fuel_Tank(0)
 tank = getdimensions(tank, tank.volume, 1.7E3)
 tank.thickness = 0.1
-safe = False
-while not safe:
+tank.safety_check()
+while not tank.safety:
     tank.thickness += 0.1
+    pressure(tank,material)
+    shellbucklingMS(tank,material)
+    tank.safety_check()
+print(tank.thickness)
