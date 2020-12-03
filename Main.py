@@ -1,4 +1,6 @@
 from Get_Volume import *
+from getdimensions import *
+from MS_shell_buckling import *
 
 class Fuel_Tank():
     def __init__(self, species):
@@ -9,6 +11,8 @@ class Fuel_Tank():
         self.radius = 415 #r_in in mm
         self.thickness = 4 #t in mm
         self.outerradius = self.radius + self.thickness # mm
+        self.fuel_mass = 480 #kg
+        self.volume = get_volume(self.pressure, self.fuel_mass)
         # All the safety margins
         self.MS_pressure = MS_pressure
         self.MS_euler = MS_euler
@@ -26,6 +30,7 @@ class Material():
         self.name = name
         self.yield_stress = yield_stress
 
+"""
 # Global variables
 max_height = 891 #L+2r in mm
 fuel_mass = 480 #kg
@@ -39,3 +44,10 @@ ev_speed = 0.5
 # Start of main loop
 
 volume = get_volume(tank.pressure, fuel_mass)
+"""
+tank = Fuel_Tank(0)
+tank = getdimensions(tank, tank.volume, 1.7E3)
+tank.thickness = 0.1
+safe = False
+while not safe:
+    tank.thickness += 0.1
