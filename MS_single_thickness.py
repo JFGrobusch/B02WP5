@@ -1,3 +1,4 @@
+"""
 # Inputs
 p = 8  # [N/mm^2] Pressure inside tank
 r = 415.3  # [mm] Radius of tank
@@ -32,8 +33,8 @@ for i in range(0, len(yield_list)):
 
     MS.append(MSi)
 
-print(" The min MS is ", min(MS), "for material with yield stress", yield_list[i])
-
+#print(" The min MS is ", min(MS), "for material with yield stress", yield_list[i])
+"""
 def pressure(tank,material):
     sigma_hoop = tank.pressure * tank.radius / tank.thickness
     tank.MS_pressure = material.yield_stress / sigma_hoop - 1
