@@ -16,7 +16,6 @@ i = 0
 MSi = 0
 MSi_min = 0
 
-
 # Functions
 def hoop_stress(p_, r_, t_):
     sigma_hoop = p_ * r_ / t_
@@ -34,3 +33,8 @@ for i in range(0, len(yield_list)):
     MS.append(MSi)
 
 print(" The min MS is ", min(MS), "for material with yield stress", yield_list[i])
+
+def pressure(tank,material):
+    sigma_hoop = tank.pressure * tank.radius / tank.thickness
+    tank.MS_pressure = material.yield_stress / sigma_hoop - 1
+
