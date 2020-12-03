@@ -1,5 +1,6 @@
 from Get_Volume import *
 from getdimensions import *
+from MS_single_thickness import *
 from MS_shell_buckling import *
 
 class Fuel_Tank():
@@ -51,3 +52,5 @@ tank.thickness = 0.1
 safe = False
 while not safe:
     tank.thickness += 0.1
+    pressure(tank,material)
+    shellbucklingMS(tank,material)

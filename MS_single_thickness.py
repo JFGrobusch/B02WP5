@@ -37,4 +37,5 @@ print(" The min MS is ", min(MS), "for material with yield stress", yield_list[i
 def pressure(tank,material):
     sigma_hoop = tank.pressure * tank.radius / tank.thickness
     tank.MS_pressure = material.yield_stress / sigma_hoop - 1
+    return tank
 
