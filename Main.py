@@ -64,6 +64,8 @@ tank = getdimensions(tank, tank.volume, 1.7E3)
 tank.thickness = 0.1
 tank.safety_check()
 while not tank.safety:
+    #print(tank.thickness)
+    print(tank.MS)
     tank.thickness += 0.1
     pressure(tank,material)
     shellbucklingMS(tank,material)
