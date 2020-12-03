@@ -131,7 +131,7 @@ tank = Fuel_Tank(0)
 evolved_tank = evolver(tank,0.5)
 tank = evolved_tank[0]
 print(tank.pressure,tank.radius,tank.thickness,tank.height)
-tanks.append(multiply(tanks,evolved_tank))
+tanks= multiply(tanks,evolved_tank)
 print(len(tanks),per_species)
 print(f'list:{tanks}')
 a=1
