@@ -109,7 +109,7 @@ def multiply(tanks,evolved_tank):
     # copy original
     original_tank = tank
     # Mutate them
-    for number in range(int(per_species-2)):
+    for number in range(int(per_species-1)):
         tank = original_tank
         variables = ['p','r','t','l']
         rnd.shuffle(variables)
