@@ -6,10 +6,11 @@ Created on Thu Dec  3 14:16:00 2020
 """
 
 from math import pi, exp
-from mmToSI import toSI, tomm
+from mmToSI import toSI, tomm, toSIm, tommm
 
 def shellbucklingMS(tank, material):
-    tank = toSI(tank)    
+    tank = toSI(tank)
+    material = toSIm(material)    
     C = ((12/pi**4)*(tank.height**4/(tank.radius**2*tank.thickness**2))*(1-material.poisson**2))
     lam = C**0.5
     k = lam + C*(1/lam)
@@ -18,4 +19,5 @@ def shellbucklingMS(tank, material):
     bucklingstress = material.yield_strength*(tank.MS_pressure+1)
     tank.MS_shell = bucklingstress/criticalstress
     tank = tomm(tank)
+    material = tommm(material)
     return(tank)
