@@ -2,6 +2,7 @@
 ## Evolving a fuel tank##
 import random as rnd
 
+"""
 class Fuel_Tank():
     def __init__(self, species):
         self.species = species
@@ -24,7 +25,8 @@ number_species = 10
 total_tanks = 100
 per_species = total_tanks / number_species
 total_generations = 10
-ev_speed = 0.1
+ev_speed = 0.01
+"""
 
 def natural_selection(tanks):
     # Sort by species
@@ -116,16 +118,20 @@ def multiply(tanks,evolved_tank):
         change = variables[0]
         if change == 'p':
             tank.pressure += ev_factor
+            print(f'p {tank.pressure}')
         elif change == 'r':
             tank.radius += ev_factor
+            print(f'r {tank.radius}')
         elif change == 't':
             tank.thickness += ev_factor
+            print(f't {tank.thickness}')
         elif change == 'l':
             tank.height += ev_factor
+            print(f'l {tank.height}')
         tanks.append(tank)
     return tanks
 
-
+"""
 tanks = []
 tank = Fuel_Tank(0)
 evolved_tank = evolver(tank,0.5)
@@ -133,12 +139,7 @@ tank = evolved_tank[0]
 print(tank.pressure,tank.radius,tank.thickness,tank.height)
 tanks= multiply(tanks,evolved_tank)
 print(len(tanks),per_species)
-print(f'list:{tanks}')
-a=1
-for tank in tanks:
-    print(a)
-    print(tank.pressure)
-    a+=1
+
 # main loop
 
 #start with tanks
@@ -149,3 +150,4 @@ for tank in tanks:
 #Empty tanks
 #Multiply
 #append to new tanks
+"""
