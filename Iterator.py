@@ -12,14 +12,21 @@ class Fuel_Tank():
         self.thickness = 4 #t in mm
         self.outerradius = self.radius + self.thickness # mm
         # All the safety margins
-        self.MS_pressure = 1 #MS_pressure
-        self.MS_euler = -1 #MS_euler
-        self.MS_shell = 1 #MS_shell
+        self.MS_pressure = 4 #MS_pressure
+        self.MS_euler = 5 #MS_euler
+        self.MS_shell = 4 #MS_shell
         self.MS_total = self.MS_pressure + self.MS_euler + self.MS_shell
         self.MS = [self.MS_pressure,self.MS_euler,self.MS_shell]
 
 population =[]
-def best_finder(number_species, per_species, tanks):
+
+number_species = 20
+total_tanks = 100
+per_species = total_tanks / number_species
+total_generations = 10
+ev_speed = 0.1
+
+def natural_selection(tanks):
     # Sort by species
     while len(tanks)>0:
         species = []
@@ -41,58 +48,95 @@ def best_finder(number_species, per_species, tanks):
         best.append(best_tank)
         best_index.append(best_index_tank)
 
-def natural_selection(tank,ev_speed):
+def evolver(tank,ev_speed):
     # check if any margin is not satisfied to fix this first
     safe = True
     for margin in tank.MS:
         if margin < 0:
             safe = False
+    print(safe)
     # Set positve or negative and find what to change.
     if safe:
-        adjuster = 1
+        adjuster = -1
         margin = max(tank.MS)
         index_margin = tank. MS.index(max(tank.MS))
     else:
-        adjuster = -1
+        adjuster = 1
         margin = min(tank.MS)
         index_margin = tank.MS.index(min(tank.MS))
+    print(margin, index_margin)
     # Get variables assosiated, currently random
-    variables = ['p','r','t','l']
     if index_margin == 0:
         # Variables for pressure: p,r,t1,t2
-        variables.pop
+        variables = ['p','r','t']
         rnd.shuffle(variables)
-        change = variables.pop
+        change = variables[0]
     elif index_margin == 1:
         # Variables for Euler: p,r,t1,t2,l
+        variables = ['p','r','t','l']
         rnd.shuffle(variables)
-        change = variables.pop
+        change = variables[0]
     elif index_margin == 2:
         # Variables for Shell: p,l,r,t1
+        variables = ['p','r','t','l']
         rnd.shuffle(variables)
-        change = variables.pop
+        change = variables[0]
     else:
+        variables = ['p','r','t','l']
         rnd.shuffle(variables)
-        change = variables.pop
+        change = variables[0]
+    print(change)
     # Find the evolution factor
-    evolution_factor = ev_speed * (x)**(1/2)
+    ev_factor = ev_speed * (abs(margin))**(1/2)
+    print(ev_factor)
     # Change the variable(s)
-    if change == 't':
-        t += adjuster * evolution_factor
+    if change == 'p':
+        tank.pressure += adjuster * ev_factor
     elif change == 'r':
-        pass
+        tank.radius += adjuster * ev_factor
     elif change == 't':
-        pass
+        tank.thickness += adjuster * ev_factor
     elif change == 'l':
-        pass
+        tank.height += adjuster * ev_factor
+    evolved_tank = [tank,ev_factor]
+    return evolved_tank
 
-def evolver(tanks):
-    # Find best for species
-    # Apply normal change
-    # copy once
-    # multiply and mutate
-    # return back to start
-    pass
+def multiply(tanks,evolved_tank):
+    tank = evolved_tank[0]
+    ev_factor = evolved_tank[1]
+    print(tank,ev_factor)
+    tanks.append(tank)
+    # Mutate them
+    for tank in range(int(per_species-1)):
+        variables = ['p','r','t','l']
+        rnd.shuffle(variables)
+        change = variables[0]
+        if change == 'p':
+            tank.pressure += adjuster * ev_factor
+        elif change == 'r':
+            tank.radius += adjuster * ev_factor
+        elif change == 't':
+            tank.thickness += adjuster * ev_factor
+        elif change == 'l':
+            tank.height += adjuster * ev_factor
+        tanks.append(tank)
+    return tanks
 
+
+tanks = []
 tank = Fuel_Tank(0)
-natural_selection(tank)
+evolved_tank = evolver(tank,0.5)
+tank = evolved_tank[0]
+print(tank.pressure,tank.radius,tank.thickness,tank.height)
+tanks.append(multiply(tanks,evolved_tank))
+print(tanks)
+# main loop
+
+#start with tanks
+#Find best tanks
+#Evolve best tanks
+#evolved.append(evolver)
+#put in evolved[]
+#Empty tanks
+#Multiply
+#append to new tanks
