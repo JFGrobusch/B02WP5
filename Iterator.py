@@ -75,10 +75,10 @@ def natural_selection(tank,ev_speed):
         rnd.shuffle(variables)
         change = variables.pop
     # Find the evolution factor
-    evolution factor = ev_speed * (x)**(1/2)
+    evolution_factor = ev_speed * (x)**(1/2)
     # Change the variable(s)
     if change == 't':
-        pass
+        t += adjuster * evolution_factor
     elif change == 'r':
         pass
     elif change == 't':
