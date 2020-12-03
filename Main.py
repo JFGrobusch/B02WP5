@@ -20,6 +20,10 @@ class Margin_of_safety():
         self.name = name
         self.value = value
 
+class Material():
+    def __init__(self, name, yield_stress):
+        self.name = name
+        self.yield_stress = yield_stress
 
 # Global variables
 max_height = 891 #L+2r in mm
