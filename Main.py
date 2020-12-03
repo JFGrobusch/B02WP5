@@ -22,7 +22,7 @@ class Fuel_Tank():
         self.MS = [self.MS_pressure,self.MS_euler,self.MS_shell]
     
     def safety_check(self):
-        for margin in MS:
+        for margin in self.MS:
             if margin < 0:
                 self.safety = False
                 break
@@ -35,9 +35,11 @@ class Margin_of_safety():
         self.value = value
 
 class Material():
-    def __init__(self, name, yield_stress):
+    def __init__(self, name, yield_strength, poisson, elasticity):
         self.name = name
-        self.yield_stress = yield_stress
+        self.yield_strength = yield_strength
+        self.poisson = poisson
+        self.elasticity = elasticity
 
 """
 # Global variables
@@ -55,7 +57,7 @@ ev_speed = 0.5
 volume = get_volume(tank.pressure, fuel_mass)
 """
 
-material = Material('Alu', 276)
+material = Material('Alu', 276, 0.33, 68.9E3)
 
 tank = Fuel_Tank(0)
 tank = getdimensions(tank, tank.volume, 1.7E3)

@@ -37,6 +37,6 @@ for i in range(0, len(yield_list)):
 """
 def pressure(tank,material):
     sigma_hoop = tank.pressure * tank.radius / tank.thickness
-    tank.MS_pressure = material.yield_stress / sigma_hoop - 1
+    tank.MS_pressure = material.yield_strength / sigma_hoop - 1
     return tank
 
