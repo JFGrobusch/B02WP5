@@ -34,6 +34,7 @@ number_species = 20
 total_tanks = 100
 per_species = total_tanks / number_species
 total_generations = 10
+ev_speed = 0.5
 
 # Start of main loop
 
