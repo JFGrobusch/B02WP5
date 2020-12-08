@@ -87,7 +87,7 @@ def get_volume(pressure, fuel_mass):
     return volume, density
 
 def pressure(tank,material):
-    sigma_hoop = tank.pressure * tank.radius / tank.thickness
+    sigma_hoop = (tank.pressure/10) * tank.radius / tank.thickness
     tank.MS_pressure = material.yield_strength / sigma_hoop - 1
 
 def euler_buck(tank,material):
