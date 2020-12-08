@@ -64,7 +64,7 @@ def get_volume(pressure, fuel_mass):
     density = density * 1000 # convert to kg/m^3
     volume = fuel_mass / density # m^3
     volume = volume * 1E9
-    print(f'Fuel density{density}, tank volume{volume}')
+    print(f'Fuel density:{round(density)}, tank volume:{round(volume)}')
     return volume
 
 def pressure(tank,material):
