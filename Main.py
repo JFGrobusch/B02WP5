@@ -1,4 +1,4 @@
-from Get_Volume import *
+import math
 from getdimensions import *
 #from MS_single_thickness import *
 from MS_shell_buckling import *
@@ -7,7 +7,7 @@ class Fuel_Tank():
     def __init__(self, species):
         self.species = species
         self.safety_factor = 1.5 #-
-        self.pressure = 80 # N/mm^2
+        self.pressure = 80 # bar
         self.height = 0 #L in mm
         self.radius = 415 #r_in in mm
         self.thickness = 4 #t in mm
@@ -58,9 +58,24 @@ ev_speed = 0.5
 volume = get_volume(tank.pressure, fuel_mass)
 """
 
+def get_volume(pressure, fuel_mass):
+    pressure -= 70
+    density = ((6*10**-5)*pressure**3) -(0.0034*pressure**2) +(0.077*pressure) +1.0064 #kg/L
+    density = density * 1000 # convert to kg/m^3
+    volume = fuel_mass / density # m^3
+    volume = volume * 1E9
+    print(f'Fuel density{density}, tank volume{volume}')
+    return volume
+
 def pressure(tank,material):
     sigma_hoop = tank.pressure * tank.radius / tank.thickness
     tank.MS_pressure = material.yield_strength / sigma_hoop - 1
+
+def euler(tank,material):
+    A = 2 * math.pi * tank.radius * tank.thickness
+    I = math.pi * (tank.radius ** 3) * tank.thickness
+    sigma_euler = (math.pi ** 2) * material.elasticity * I / (A * (tank.height ** 2))
+    tank.MS_euler = material.yield_strength / sigma_euler - 1
 
 safety_factor = 1.1
 
@@ -70,12 +85,17 @@ tank = Fuel_Tank(0)
 getdimensions(tank, tank.volume, 1.7E3)
 tank.thickness = 0.1
 tank.safety_check()
+"""
 while not tank.safety:
     #print(tank.thickness)
     #print(tank.MS)
     tank.thickness += 0.1
     pressure(tank,material)
+    euler(tank,material)
     shellbucklingMS(tank,material)
     tank.safety_check()
     print(tank.MS)
+"""
 print(tank.thickness)
+print(tank.radius)
+print(tank.height)
