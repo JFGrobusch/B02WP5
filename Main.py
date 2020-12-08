@@ -59,7 +59,7 @@ volume = get_volume(tank.pressure, fuel_mass)
 """
 
 def pressure(tank,material):
-    sigma_hoop = tank.pressure * tank.radius / tank.thickness
+    sigma_hoop = (tank.pressure/10) * tank.radius / tank.thickness
     tank.MS_pressure = material.yield_strength / sigma_hoop - 1
 
 safety_factor = 1.1
