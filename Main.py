@@ -71,7 +71,7 @@ def pressure(tank,material):
     sigma_hoop = tank.pressure * tank.radius / tank.thickness
     tank.MS_pressure = material.yield_strength / sigma_hoop - 1
 
-def euler(tank,material):
+def euler_buck(tank,material):
     A = 2 * math.pi * tank.radius * tank.thickness
     I = math.pi * (tank.radius ** 3) * tank.thickness
     sigma_euler = (math.pi ** 2) * material.elasticity * I / (A * (tank.height ** 2))
@@ -82,20 +82,20 @@ safety_factor = 1.1
 material = Material('Alu', 276/safety_factor, 0.33, 68.9E3)
 
 tank = Fuel_Tank(0)
-getdimensions(tank, tank.volume, 1.7E3)
+getdimensions(tank, tank.volume, 891)
 tank.thickness = 0.1
 tank.safety_check()
-"""
+
 while not tank.safety:
     #print(tank.thickness)
     #print(tank.MS)
     tank.thickness += 0.1
     pressure(tank,material)
-    euler(tank,material)
+    euler_buck(tank,material)
     shellbucklingMS(tank,material)
     tank.safety_check()
     print(tank.MS)
-"""
+
 print(tank.thickness)
 print(tank.radius)
 print(tank.height)
