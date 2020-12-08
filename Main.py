@@ -13,11 +13,11 @@ class Fuel_Tank():
         self.thickness = 4 #t in mm
         self.outerradius = self.radius + self.thickness # mm
         self.fuel_mass = 480 #kg
-        self.volume = get_volume(self.pressure, self.fuel_mass)
+        self.volume, self.density = get_volume(self.pressure, self.fuel_mass)
         # All the safety margins
         self.MS_pressure = -1
-        self.MS_euler = 0
-        self.MS_shell = 0
+        self.MS_euler = -1
+        self.MS_shell = -1
         self.MS_total = self.MS_pressure + self.MS_euler + self.MS_shell
         self.MS = [self.MS_pressure,self.MS_euler,self.MS_shell]
     
@@ -58,6 +58,25 @@ ev_speed = 0.5
 volume = get_volume(tank.pressure, fuel_mass)
 """
 
+from math import pi
+import numpy as np
+
+def volume(r, maxheight):
+    V = pi*r*(maxheight*r-(2/3)*r**2)
+    return(V)
+
+
+def getdimensions(tank, targetvolume, maxheight):
+    stepsize = 0.1
+    h = maxheight
+    Vdiffs = []
+    rlist = []
+    for i in np.arange(0, 0.5*h, stepsize):
+        rlist.append(i)
+        Vdiffs.append(abs(volume(i, h)-targetvolume))   
+    tank.radius = rlist[Vdiffs.index(min(Vdiffs))]
+    tank.height = h - 2*tank.radius
+
 def get_volume(pressure, fuel_mass):
     pressure -= 70
     density = ((6*10**-5)*pressure**3) -(0.0034*pressure**2) +(0.077*pressure) +1.0064 #kg/L
@@ -65,7 +84,7 @@ def get_volume(pressure, fuel_mass):
     volume = fuel_mass / density # m^3
     volume = volume * 1E9
     print(f'Fuel density:{round(density)}, tank volume:{round(volume)}')
-    return volume
+    return volume, density
 
 def pressure(tank,material):
     sigma_hoop = tank.pressure * tank.radius / tank.thickness
@@ -74,28 +93,37 @@ def pressure(tank,material):
 def euler_buck(tank,material):
     A = 2 * math.pi * tank.radius * tank.thickness
     I = math.pi * (tank.radius ** 3) * tank.thickness
-    sigma_euler = (math.pi ** 2) * material.elasticity * I / (A * (tank.height ** 2))
-    tank.MS_euler = material.yield_strength / sigma_euler - 1
+    sigma_euler = ((math.pi ** 2) * material.elasticity * I) / (A * (tank.height ** 2))
+    tank.MS_euler = sigma_euler / material.yield_strength - 1
 
 safety_factor = 1.1
 
 material = Material('Alu', 276/safety_factor, 0.33, 68.9E3)
+#material = Material('tit', 880/safety_factor, 0.342, 113.8E3)
 
 tank = Fuel_Tank(0)
-getdimensions(tank, tank.volume, 891)
-tank.thickness = 0.1
 tank.safety_check()
-
-while not tank.safety:
-    #print(tank.thickness)
-    #print(tank.MS)
-    tank.thickness += 0.1
-    pressure(tank,material)
-    euler_buck(tank,material)
-    shellbucklingMS(tank,material)
+max_height = 891
+for height in range(1,890):
+    if tank.safety:
+        break
+    max_height -= 1
+    getdimensions(tank, tank.volume, max_height)
+    tank.thickness = 0.1
     tank.safety_check()
-    print(tank.MS)
+    print(f'new height:{max_height},cyl h {tank.height}')
+    print(tank.MS_euler)
+    for t in range(1,100):
+        tank.thickness += 0.1
+        pressure(tank,material)
+        euler_buck(tank,material)
+        shellbucklingMS(tank,material)
+        tank.safety_check()
+        print(tank.MS)
+        if tank.safety:
+            break
 
 print(tank.thickness)
 print(tank.radius)
 print(tank.height)
+print(f'Fuel density:{round(tank.density)}, tank volume:{round(tank.volume)}')
