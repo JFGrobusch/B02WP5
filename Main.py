@@ -84,6 +84,7 @@ tank = Fuel_Tank(0)
 getdimensions(tank, tank.volume, 1.7E3)
 tank.thickness = 0.1
 tank.safety_check()
+"""
 while not tank.safety:
     #print(tank.thickness)
     #print(tank.MS)
@@ -93,6 +94,7 @@ while not tank.safety:
     shellbucklingMS(tank,material)
     tank.safety_check()
     print(tank.MS)
+"""
 print(tank.thickness)
 print(tank.volume)
 print(tank.radius)
