@@ -2,6 +2,7 @@ from Get_Volume import *
 from getdimensions import *
 #from MS_single_thickness import *
 from MS_shell_buckling import *
+import math
 
 class Fuel_Tank():
     def __init__(self, species):
@@ -29,6 +30,17 @@ class Fuel_Tank():
                 break
             else:
                 self.safety = True
+    
+    def physical(self,material):
+        # Cylindrical part
+        if self.height > 0:
+            self.volume = math.pi*self.radius**2*self.height - math.pi*(self.radius-self.thickness)**2*self.height
+        else:
+            self.volume = 0
+        # spherical part
+        self.volume += (4/3)*math.pi*self.radius**3 - (4/3)*math.pi*(self.radius-self.thickness)**3
+        self.volume = self.volume*1E-9
+        self.mass = material.density * self.volume
 
 class Margin_of_safety():
     def __init__(self, name, value):
@@ -36,11 +48,12 @@ class Margin_of_safety():
         self.value = value
 
 class Material():
-    def __init__(self, name, yield_strength, poisson, elasticity):
+    def __init__(self, name, yield_strength, poisson, elasticity, density):
         self.name = name
         self.yield_strength = yield_strength
         self.poisson = poisson
         self.elasticity = elasticity
+        self.density = density
 
 """
 # Global variables
@@ -64,21 +77,26 @@ def pressure(tank,material):
 
 safety_factor = 1.25
 
-#material = Material('Alu', 276/safety_factor, 0.33, 68.9E3)
-material = Material('tit', 880/safety_factor, 0.342, 113.8E3)
+Aluminium = Material('Alu', 276/safety_factor, 0.33, 68.9E3, 2700)
+Titanium = Material('tit', 880/safety_factor, 0.342, 113.8E3, 4430)
+Steel = Material('Steel', 460/safety_factor, 0.29, 205E3, 7850)
+materials = [Aluminium,Titanium,Steel]
 
-tank = Fuel_Tank(0)
-getdimensions(tank, tank.volume, 891)
-tank.thickness = 0.1
-tank.safety_check()
-while not tank.safety:
-    #print(tank.thickness)
-    #print(tank.MS)
-    tank.thickness += 0.1
-    pressure(tank,material)
-    shellbucklingMS(tank,material)
+for material in materials:
+    tank = Fuel_Tank(0)
+    getdimensions(tank, tank.volume, 891)
+    tank.thickness = 0.1
     tank.safety_check()
-    print(tank.MS)
-print(tank.thickness)
-print(tank.height)
-print(tank.radius)
+    while not tank.safety:
+        #print(tank.thickness)
+        #print(tank.MS)
+        tank.thickness += 0.1
+        pressure(tank,material)
+        shellbucklingMS(tank,material)
+        tank.safety_check()
+        #print(tank.MS)
+    print(f'thickness: {tank.thickness}')
+    print(f'height cylinder: {tank.height}')
+    print(f'radius: {tank.radius}')
+    tank.physical(material)
+    print(f'volume:{tank.volume}, mass:{tank.mass}')
