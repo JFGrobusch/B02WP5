@@ -15,10 +15,11 @@ class Fuel_Tank():
         self.outerradius = self.radius + self.thickness # mm
         self.fuel_mass = 480 #kg
         self.volume = get_volume(self.pressure, self.fuel_mass)
+        self.MOI = math.pi * (self.radius ** 3) * self.thickness
         # All the safety margins
         self.MS_pressure = -1
         self.MS_euler = 0
-        self.MS_shell = 0
+        self.MS_shell = -1
         self.MS_total = self.MS_pressure + self.MS_euler + self.MS_shell
         self.MS = [self.MS_pressure,self.MS_euler,self.MS_shell]
     
@@ -83,6 +84,7 @@ Steel = Material('Steel', 460/safety_factor, 0.29, 205E3, 7850)
 materials = [Aluminium,Titanium,Steel]
 
 for material in materials:
+    print(f'---{material.name}---')
     tank = Fuel_Tank(0)
     getdimensions(tank, tank.volume, 891)
     tank.thickness = 0.1
@@ -100,3 +102,8 @@ for material in materials:
     print(f'radius: {tank.radius}')
     tank.physical(material)
     print(f'volume:{tank.volume}, mass:{tank.mass}')
+    print(tank.MS)
+    print(f'Hoop_stress:{material.yield_strength/(tank.MS_pressure+1)}')
+    print(f'Shell_stress:{(material.yield_strength*(tank.MS_pressure+1))/(tank.MS_shell+1)}')
+    euler_stress = (math.pi**2 * material.elasticity * tank.MOI) / (math.pi * tank.radius**2 * tank.height**2)
+    print(f'Euler_stress:{euler_stress}')
